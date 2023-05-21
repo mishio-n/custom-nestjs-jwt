@@ -7,6 +7,7 @@ import {
   JwtVerifyOptions
 } from './interfaces';
 import { JWT_MODULE_OPTIONS } from './jwt.constants';
+import { Payload } from './interfaces/palyload.interface';
 
 @Injectable()
 export class JwtService {
@@ -18,7 +19,7 @@ export class JwtService {
     private readonly options: JwtModuleOptions = {}
   ) {}
 
-  sign(payload: string | Buffer | object, options?: JwtSignOptions): string {
+  sign(payload: Payload, options?: JwtSignOptions): string {
     const signOptions = this.mergeJwtOptions(
       { ...options },
       'signOptions'
@@ -33,10 +34,7 @@ export class JwtService {
     return jwt.sign(payload, secret, signOptions);
   }
 
-  signAsync(
-    payload: string | Buffer | object,
-    options?: JwtSignOptions
-  ): Promise<string> {
+  signAsync(payload: Payload, options?: JwtSignOptions): Promise<string> {
     const signOptions = this.mergeJwtOptions(
       { ...options },
       'signOptions'
@@ -55,7 +53,7 @@ export class JwtService {
     );
   }
 
-  verify<T extends object = any>(token: string, options?: JwtVerifyOptions): T {
+  verify(token: string, options?: JwtVerifyOptions): Payload & jwt.JwtPayload {
     const verifyOptions = this.mergeJwtOptions({ ...options }, 'verifyOptions');
     const secret = this.getSecretKey(
       token,
@@ -64,7 +62,7 @@ export class JwtService {
       JwtSecretRequestType.VERIFY
     );
 
-    return jwt.verify(token, secret, verifyOptions) as T;
+    return jwt.verify(token, secret, verifyOptions) as Payload & jwt.JwtPayload;
   }
 
   verifyAsync<T extends object = any>(
