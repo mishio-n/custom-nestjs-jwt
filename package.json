@@ -1,6 +1,6 @@
 {
   "name": "custom-nestjs-jwt",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "@nestjs/jwt with customized types",
   "author": "mishio-n",
   "license": "MIT",
